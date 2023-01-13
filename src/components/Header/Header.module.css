@@ -1,0 +1,51 @@
+.container {
+    display: flex;
+    align-items: center;
+    height: 97px;
+    background: #2B2C37;
+    padding: 35px 0;
+}
+
+.logoContainer {
+    min-width: 300px;
+    padding-left: 34px;
+    height: 97px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-right: 1px solid #3E3F4E;
+}
+
+.logo1 {
+    max-width: 24px;
+    max-height: 25px;
+}
+
+.logo {
+    max-width: 113px;
+    max-height: 25px;
+}
+
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    flex-grow: 2;
+
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    color: #FFFFFF;
+}
+
+.btn {
+    padding: 15px 35px;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 19px;
+    color: #FFFFFF;
+    background: #635FC7;
+    border-radius: 5px;
+    border: none;
+}

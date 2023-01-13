@@ -1,0 +1,151 @@
+.container {
+    width: 480px;
+    height: 479px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #2B2C37;
+    border-radius: 6px;
+    border: 1px solid #fff;
+}
+
+.closeModal {
+    /*animation: close 1s linear;*/
+    transform: translate(-50%, -300%);
+    transition: all 1s;
+}
+
+.openModal {
+    transform: translate(-50%, -50%);
+    transition: all 1s;
+    /*animation-name: open;*/
+    /*animation-duration: 3s;*/
+}
+
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #2B2C37;
+    border: none;
+    cursor: pointer;
+}
+
+.closeImg {
+    width: 15px;
+    height: 15px;
+}
+
+.innerWrapper {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.title {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 23px;
+    color: #FFFFFF;
+}
+
+.addNameContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.changeName {
+    padding: 8px;
+    height: 40px;
+    background: #2B2C37;
+    border: 1px solid rgba(130, 143, 163, 0.25);
+    border-radius: 4px;
+}
+
+.changeName:hover {
+    outline: none !important;
+    border: 1px solid #fff;
+}
+
+.changeName:active {
+    outline: none !important;
+    border: 1px solid #fff;
+}
+
+.error {
+    border: 1px solid tomato;
+}
+
+
+.columnsWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.text {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FFFFFF;
+}
+
+.item {
+    padding: 8px;
+    height: 40px;
+    background: #2B2C37;
+    border: 1px solid rgba(130, 143, 163, 0.25);
+    border-radius: 4px;
+
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 23px;
+    color: #828080;
+}
+
+
+.btn {
+    padding: 8px 0;
+    background: #635FC7;
+    border: none;
+    border-radius: 20px;
+
+
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 23px;
+    text-align: center;
+    color: #FFFFFF;
+
+}
+
+.delete {
+    background: #EA5555;
+}
+
+
+
+
+/*@keyframes open {*/
+/*    0% {*/
+/*        opacity: .1;*/
+/*    }*/
+
+/*    100% {*/
+/*        opacity: 1;*/
+/*    }*/
+/*}*/
+
+/*@keyframes close {*/
+/*    0% {*/
+/*        transform: scale(1);*/
+/*    }*/
+
+/*    100% {*/
+/*        transform: scale(0);*/
+/*    }*/
+/*}*/

@@ -1,0 +1,150 @@
+.wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 1, 18, 0.2);
+    z-index: 3;
+    transform: translateY(-200%);
+    transition: all 1s;
+    animation: opacity 5s linear;
+}
+
+.innerWrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 480px;
+    height: 675px;
+    background: #2B2C37;
+    border-radius: 6px;
+    border: 1px solid #fff;
+}
+
+.contentWrapper {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.title {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 23px;
+
+    color: #FFFFFF;
+}
+
+.input {
+    width: 100%;
+    height: 40px;
+    padding: 8px 16px;
+    background: #2B2C37;
+    border: 1px solid rgba(130, 143, 163, 0.25);
+    border-radius: 4px;
+    color: #fff;
+}
+
+.input:hover {
+    outline: none;
+    border: 1px solid #fff;
+}
+
+.blockTextArea {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.blockTextArea textarea {
+    padding: 8px 16px;
+    height: 112px;
+    background: #2B2C37;
+    border: 1px solid rgba(130, 143, 163, 0.25);
+    border-radius: 4px;
+    resize: none;
+    color: #fff;
+}
+
+.dateContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dateContainer label {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.date {
+    padding: 5px;
+    width: 100%;
+    height: 25px;
+    flex-grow: 2;
+
+    background: #2B2C37;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.statusContainer {
+    width: 100%;
+}
+
+.statusContainer label {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.option {
+    height: 40px;
+    padding: 10px 15px;
+}
+
+.btn {
+    padding: 8px 0;
+    background: #635FC7;
+    border: none;
+    border-radius: 20px;
+
+
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 23px;
+    text-align: center;
+    color: #FFFFFF;
+
+}
+
+.delete {
+    background: #EA5555;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #2B2C37;
+    border: none;
+    cursor: pointer;
+}
+
+.openModal {
+    transform: translateY(0);
+    transition: all 1s;
+}
+
+
