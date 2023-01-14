@@ -1,12 +1,17 @@
-import React, { ChangeEvent, ChangeEventHandler } from "react";
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import s from "./EditTask.module.css";
-import { TaskDataType } from "../../api/api-types/api-types";
+import { TaskDataType, TaskModelType } from "../../api/api-types/api-types";
 import close from "../EditToDo/img/close.svg";
-import { deleteTaskTC } from "../../BLL/redux/task-reducer";
+import { deleteTaskTC, updateTaskTC } from "../../BLL/redux/task-reducer";
 import { AppDispatch } from "../../BLL/redux/store";
 
 type EditTaskType = {
-  task: TaskDataType[];
+  task: TaskDataType;
   setAddTaskModal: (value: boolean) => void;
   addTaskModal: boolean;
 };
@@ -17,38 +22,81 @@ export const EditTask: React.FC<EditTaskType> = ({
   addTaskModal,
 }) => {
   const dispatch = AppDispatch();
-  const [
-    {
-      priority,
-      id,
-      title,
-      order,
-      addedDate,
-      startDate,
-      deadline,
-      status,
-      completed,
-      description,
-      todoListId,
-    },
-  ] = task;
+  let {
+    priority,
+    id,
+    title,
+    order,
+    addedDate,
+    startDate,
+    deadline,
+    status,
+    completed,
+    description,
+    todoListId,
+  } = task;
 
-  const statusTask =
-    status === 0
-      ? "TODO"
-      : status === 1
-      ? "DOING"
-      : status === 2
-      ? "DONE"
-      : "DRAFT";
+  const [newTitle, setNewTitle] = useState(title);
 
-  const dataChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.currentTarget.value);
+  const [newDescription, setNewDescription] = useState(
+    description ? description : ""
+  );
+  const [newStartDate, setNewStartDate] = useState(
+    startDate ? startDate : "2023-01-13"
+  );
+  const [newDeadline, setNewDeadline] = useState(
+    deadline ? deadline : "2023-02-13"
+  );
+  const [newStatus, setNewStatus] = useState(status);
+
+  const closeModalHandler = () => {
+    setNewTitle(title);
+    setNewDescription(description ? description : "");
+    setNewStartDate(startDate ? startDate : "2023-01-13");
+    setNewDeadline(deadline ? deadline : "2023-02-13");
+    setNewStatus(0);
+    setAddTaskModal(false);
+  };
+
+  const model: TaskModelType = {
+    title: newTitle,
+    description: newDescription,
+    status: newStatus,
+    priority,
+    startDate: newStartDate,
+    deadline: newDeadline,
+    completed,
+  };
+
+  const onChangeDeadline = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewDeadline(e.currentTarget.value);
+  };
+
+  const onChangeStartDate = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewStartDate(e.currentTarget.value);
   };
 
   const deleteTaskHandler = () => {
     setAddTaskModal(false);
     dispatch(deleteTaskTC(todoListId, id));
+  };
+
+  const saveChangesTask = () => {
+    console.log(model);
+    dispatch(updateTaskTC(todoListId, id, model));
+    setAddTaskModal(false);
+  };
+
+  const onChangeTitleTask = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewTitle(e.currentTarget.value);
+  };
+
+  const onChangeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setNewDescription(e.currentTarget.value);
+  };
+
+  const onChangeStatus = (e: ChangeEvent<HTMLSelectElement>) => {
+    setNewStatus(Number(e.currentTarget.value));
   };
 
   return (
@@ -57,7 +105,7 @@ export const EditTask: React.FC<EditTaskType> = ({
         <div className={s.container}>
           <button className={s.close}>
             <img
-              onClick={() => setAddTaskModal(false)}
+              onClick={closeModalHandler}
               className={s.closeImg}
               src={close}
               alt="close"
@@ -69,7 +117,13 @@ export const EditTask: React.FC<EditTaskType> = ({
             <div className={s.blockInputTitle}>
               <label>
                 Title
-                <input className={s.input} type="text" placeholder={title} />
+                <input
+                  onChange={onChangeTitleTask}
+                  value={newTitle}
+                  className={s.input}
+                  type="text"
+                  placeholder={title}
+                />
               </label>
             </div>
 
@@ -77,6 +131,8 @@ export const EditTask: React.FC<EditTaskType> = ({
               <div className={s.blockTextArea}>
                 <span>Description</span>
                 <textarea
+                  onChange={onChangeTextArea}
+                  value={newDescription}
                   name=""
                   placeholder={
                     description
@@ -91,22 +147,36 @@ export const EditTask: React.FC<EditTaskType> = ({
             <div className={s.dateContainer}>
               <label>
                 <span>Start Date</span>
-                <input className={s.date} type="date" />
+                <input
+                  onChange={onChangeStartDate}
+                  value={newStartDate}
+                  className={s.date}
+                  type="date"
+                />
               </label>
               <label>
                 <span>Deadline</span>
-                <input onChange={dataChange} className={s.date} type="date" />
+                <input
+                  value={newDeadline}
+                  onChange={onChangeDeadline}
+                  className={s.date}
+                  type="date"
+                />
               </label>
             </div>
 
             <div className={s.statusContainer}>
               <label>
                 <span>Status</span>
-                <select className={s.input}>
-                  <option className={s.option}>Todo</option>
-                  <option className={s.option}>Doing</option>
-                  <option className={s.option}>Done</option>
-                  <option className={s.option}>Draft</option>
+                <select
+                  value={newStatus}
+                  onChange={onChangeStatus}
+                  className={s.input}
+                >
+                  <option value={0}>Todo</option>
+                  <option value={1}>Doing</option>
+                  <option value={2}>Done</option>
+                  <option value={3}>Draft</option>
                 </select>
               </label>
             </div>
@@ -117,7 +187,9 @@ export const EditTask: React.FC<EditTaskType> = ({
             >
               Delete
             </button>
-            <button className={s.btn}>Save Changes</button>
+            <button onClick={saveChangesTask} className={s.btn}>
+              Save Changes
+            </button>
           </div>
         </div>
       </div>

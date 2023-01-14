@@ -4,6 +4,7 @@ import { TaskStateType } from "../../BLL/redux/redux-type/redux-type";
 import s from "./Tasks.module.css";
 import setting from "./img/setting.svg";
 import { EditTask } from "../EditTask/EditTask";
+import TaskColumn from "./TaskColumn/TaskColumn";
 
 type TaskType = {
   todoListId: string;
@@ -11,8 +12,12 @@ type TaskType = {
 
 export const Tasks: React.FC<TaskType> = ({ todoListId }) => {
   const [addTaskModal, setAddTaskModal] = useState(false);
+  const [taskId, setTaskId] = useState("");
   const tasks = useAppSelector<TaskStateType>((state) => state.tasksListData);
+
   const currentTasks = tasks[todoListId];
+  const [task] = taskId ? currentTasks.filter((t) => t.id === taskId) : [];
+
   if (!currentTasks) return null;
 
   const todo = currentTasks?.filter((t) => t.status === 0);
@@ -23,104 +28,39 @@ export const Tasks: React.FC<TaskType> = ({ todoListId }) => {
   return (
     <div className={s.container}>
       <div className={s.wrapper}>
-        <div className={s.column}>
-          <div className={s.titleContainer}>
-            <div className={`${s.circle} ${s.todo}`} />
-            <h2 className={s.title}>todo({todo.length})</h2>
-          </div>
-          {todo.map((t) => {
-            const changeTaskHandler = () => {
-              setAddTaskModal(true);
-            };
-            return (
-              <div className={s.blockTask} key={t.id}>
-                <img
-                  onClick={changeTaskHandler}
-                  className={s.setting}
-                  src={setting}
-                  alt="setting"
-                />
-                <div className={s.blockTaskTitle}>{t.title}</div>
-                <div>{t.description ? t.description : "description"}</div>
-              </div>
-            );
-          })}
-        </div>
-        <div className={s.column}>
-          <div className={s.titleContainer}>
-            <div className={`${s.circle} ${s.doing}`}></div>
-            <h2 className={s.title}>doing</h2>
-          </div>
-          {doing.map((t) => {
-            const changeTaskHandler = () => {
-              setAddTaskModal(true);
-            };
-            return (
-              <div className={s.blockTask} key={t.id}>
-                <img
-                  onClick={changeTaskHandler}
-                  className={s.setting}
-                  src={setting}
-                  alt="setting"
-                />
-                <div className={s.blockTaskTitle}>{t.title}</div>
-                <div>{t.description ? t.description : "description"}</div>
-              </div>
-            );
-          })}
-        </div>
-        <div className={s.column}>
-          <div className={s.titleContainer}>
-            <div className={`${s.circle} ${s.done}`}></div>
-            <h2 className={s.title}>done</h2>
-          </div>
-          {done.map((t) => {
-            const changeTaskHandler = () => {
-              setAddTaskModal(true);
-            };
-            return (
-              <div className={s.blockTask} key={t.id}>
-                <img
-                  onClick={changeTaskHandler}
-                  className={s.setting}
-                  src={setting}
-                  alt="setting"
-                />
-                <div className={s.blockTaskTitle}>{t.title}</div>
-                <div>{t.description ? t.description : "description"}</div>
-              </div>
-            );
-          })}
-        </div>
-        <div className={s.column}>
-          <div className={s.titleContainer}>
-            <div className={`${s.circle} ${s.draft}`}></div>
-            <h2 className={s.title}>draft</h2>
-          </div>
-          {draft.map((t) => {
-            const changeTaskHandler = () => {
-              setAddTaskModal(true);
-            };
-            return (
-              <div className={s.blockTask} key={t.id}>
-                <img
-                  onClick={changeTaskHandler}
-                  className={s.setting}
-                  src={setting}
-                  alt="setting"
-                />
-                <div className={s.blockTaskTitle}>{t.title}</div>
-                <div>{t.description ? t.description : "description"}</div>
-              </div>
-            );
-          })}
-        </div>
+        <TaskColumn
+          title={"todo"}
+          tasks={todo}
+          setTaskId={setTaskId}
+          setAddTaskModal={setAddTaskModal}
+        />
+        <TaskColumn
+          title={"doing"}
+          tasks={doing}
+          setTaskId={setTaskId}
+          setAddTaskModal={setAddTaskModal}
+        />
+
+        <TaskColumn
+          title={"done"}
+          tasks={done}
+          setTaskId={setTaskId}
+          setAddTaskModal={setAddTaskModal}
+        />
+        <TaskColumn
+          title={"draft"}
+          tasks={draft}
+          setTaskId={setTaskId}
+          setAddTaskModal={setAddTaskModal}
+        />
       </div>
-      <EditTask
-        addTaskModal={addTaskModal}
-        setAddTaskModal={setAddTaskModal}
-        task={currentTasks}
-      />
+      {addTaskModal && (
+        <EditTask
+          addTaskModal={addTaskModal}
+          setAddTaskModal={setAddTaskModal}
+          task={task}
+        />
+      )}
     </div>
   );
 };

@@ -63,12 +63,14 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ visible }) => {
           <Tasks todoListId={id} />
         </div>
       </div>
-      <EditTodo
-        todolistId={id}
-        modalTodo={modalEdit}
-        setModalTodo={setModalEdit}
-        title={title}
-      />
+      {modalEdit && (
+        <EditTodo
+          todolistId={id}
+          modalTodo={modalEdit}
+          setModalTodo={setModalEdit}
+          title={title}
+        />
+      )}
     </div>
   );
 });
