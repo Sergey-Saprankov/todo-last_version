@@ -7,7 +7,11 @@ import React, {
 import s from "./EditTask.module.css";
 import { TaskDataType, TaskModelType } from "../../api/api-types/api-types";
 import close from "../EditToDo/img/close.svg";
-import { deleteTaskTC, updateTaskTC } from "../../BLL/redux/task-reducer";
+import {
+  deleteTaskTC,
+  UpdateDomainTaskModelType,
+  updateTaskTC,
+} from "../../BLL/redux/task-reducer";
 import { AppDispatch } from "../../BLL/redux/store";
 
 type EditTaskType = {
@@ -31,7 +35,6 @@ export const EditTask: React.FC<EditTaskType> = ({
     startDate,
     deadline,
     status,
-    completed,
     description,
     todoListId,
   } = task;
@@ -58,14 +61,13 @@ export const EditTask: React.FC<EditTaskType> = ({
     setAddTaskModal(false);
   };
 
-  const model: TaskModelType = {
+  const model: UpdateDomainTaskModelType = {
     title: newTitle,
     description: newDescription,
     status: newStatus,
     priority,
     startDate: newStartDate,
     deadline: newDeadline,
-    completed,
   };
 
   const onChangeDeadline = (e: ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +84,6 @@ export const EditTask: React.FC<EditTaskType> = ({
   };
 
   const saveChangesTask = () => {
-    console.log(model);
     dispatch(updateTaskTC(todoListId, id, model));
     setAddTaskModal(false);
   };

@@ -6,6 +6,7 @@ import {
   changeTodoListTitleAC,
   deleteTodoListTC,
   removeTodoListAC,
+  updateTodoListTitle,
 } from "../../BLL/redux/todolist-reducer";
 import { AppDispatch } from "../../BLL/redux/store";
 
@@ -44,7 +45,7 @@ export const EditTodo: React.FC<AddNewBoardType> = ({
 
   const addedNewToDoHandler = () => {
     if (newTodoTitle.trim()) {
-      dispatch(changeTodoListTitleAC(todolistId, newTodoTitle));
+      dispatch(updateTodoListTitle(todolistId, newTodoTitle));
       setError("");
       setModalTodo(false);
     } else {

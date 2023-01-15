@@ -1,5 +1,10 @@
-import { ActionType, TaskStateType } from "./redux-type/redux-type";
-import { TaskDataType, TaskModelType } from "../../api/api-types/api-types";
+import { ActionType, StoreType, TaskStateType } from "./redux-type/redux-type";
+import {
+  TaskDataType,
+  TaskModelType,
+  TaskPrioritiesType,
+  TaskStatusesType,
+} from "../../api/api-types/api-types";
 import { Dispatch } from "redux";
 import { tasksAPI } from "../../api/tasks-api";
 
@@ -29,6 +34,9 @@ export const taskReducer = (
           action.task,
         ],
       };
+    case "REMOVE-TODO-LIST":
+      delete state[action.todoListId];
+      return { ...state };
     case "DELETE_TASK":
       return {
         ...state,
@@ -37,15 +45,13 @@ export const taskReducer = (
         ),
       };
     case "UPDATE-TASK":
+      console.log(action.model);
       return {
         ...state,
         [action.todoListId]: state[action.todoListId].map((t) =>
           t.id === action.taskId ? { ...t, ...action.model } : t
         ),
       };
-    case "REMOVE-TODO-LIST":
-      delete state[action.todoListId];
-      return { ...state };
     default:
       return state;
   }
@@ -125,7 +131,7 @@ export const setTasksAC = (tasks: TaskDataType[], todoListId: string) => {
 export const updateTaskAC = (
   todoListId: string,
   taskId: string,
-  model: TaskModelType
+  model: TaskDataType
 ) => {
   return {
     type: "UPDATE-TASK",
@@ -148,11 +154,41 @@ export const addTaskTC =
     });
   };
 
+export type UpdateDomainTaskModelType = {
+  title?: string;
+  description?: string;
+  completed?: boolean;
+  status?: TaskStatusesType;
+  priority?: TaskPrioritiesType;
+  startDate?: string;
+  deadline?: string;
+};
+
 export const updateTaskTC =
-  (todoListId: string, taskId: string, model: TaskModelType) =>
-  (dispatch: Dispatch) => {
-    tasksAPI.updateTask(todoListId, taskId, model).then((res) => {
-      dispatch(updateTaskAC(todoListId, taskId, model));
+  (todoListId: string, taskId: string, model: UpdateDomainTaskModelType) =>
+  (dispatch: Dispatch, getState: () => StoreType) => {
+    const state = getState();
+    const [task] = state.tasksListData[todoListId].filter(
+      (t) => t.id === taskId
+    );
+
+    if (!task) {
+      console.log("task not found");
+      return;
+    }
+
+    const apiModel: TaskModelType = {
+      title: task.title,
+      description: task.description,
+      status: task.status,
+      priority: task.priority,
+      startDate: task.startDate,
+      deadline: task.deadline,
+      ...model,
+    };
+
+    tasksAPI.updateTask(todoListId, taskId, apiModel).then((res) => {
+      dispatch(updateTaskAC(todoListId, taskId, res.data.data.item));
     });
   };
 

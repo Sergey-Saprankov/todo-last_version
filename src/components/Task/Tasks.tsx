@@ -16,9 +16,10 @@ export const Tasks: React.FC<TaskType> = ({ todoListId }) => {
   const tasks = useAppSelector<TaskStateType>((state) => state.tasksListData);
 
   const currentTasks = tasks[todoListId];
-  const [task] = taskId ? currentTasks.filter((t) => t.id === taskId) : [];
 
   if (!currentTasks) return null;
+
+  const [task] = taskId ? currentTasks.filter((t) => t.id === taskId) : [];
 
   const todo = currentTasks?.filter((t) => t.status === 0);
   const doing = currentTasks?.filter((t) => t.status === 1);

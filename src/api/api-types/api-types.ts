@@ -17,7 +17,7 @@ export type ResponseType<T = {}> = {
 export type TaskModelType = {
   title: string;
   description: string;
-  completed: boolean;
+  completed?: boolean;
   status: TaskStatusesType;
   priority: TaskPrioritiesType;
   startDate: string;
@@ -40,17 +40,16 @@ export enum TaskPrioritiesType {
 }
 
 export type TaskDataType = {
-  title: string;
+  addedDate: string;
+  deadline: string;
   description: string;
-  completed: boolean;
-  status: TaskStatusesType;
+  id: string;
+  order: number;
   priority: number;
   startDate: string;
-  deadline: string;
-  id: string;
+  status: number;
+  title: string;
   todoListId: string;
-  order: number;
-  addedDate: string;
 };
 
 export type GetTaskResponseType = {

@@ -7,6 +7,7 @@ import { addTaskTC, getTasksTC } from "../../BLL/redux/task-reducer";
 import { Tasks } from "../Task/Tasks";
 import { useParams } from "react-router-dom";
 import { TodoEntityType } from "../../BLL/redux/redux-type/redux-type";
+import { updateTodoListTitle } from "../../BLL/redux/todolist-reducer";
 
 type TodolistType = {
   visible: boolean;
