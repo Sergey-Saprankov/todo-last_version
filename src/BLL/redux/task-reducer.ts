@@ -5,9 +5,9 @@ import {
   TaskPrioritiesType,
   TaskStatusesType,
 } from "../../api/api-types/api-types";
-import { Dispatch } from "redux";
 import { tasksAPI } from "../../api/tasks-api";
 import { AppThunk } from "./store";
+import { setErrorAC, setStatusAC } from "./app-reducer";
 
 const initialStateTask: TaskStateType = {};
 
@@ -145,16 +145,20 @@ export const updateTaskAC = (
 export const getTasksTC =
   (todoListId: string): AppThunk =>
   (dispatch) => {
+    dispatch(setStatusAC("loading"));
     tasksAPI.getTasks(todoListId).then((res) => {
       dispatch(setTasksAC(res.data.items, todoListId));
+      dispatch(setStatusAC("succeeded"));
     });
   };
 
 export const addTaskTC =
   (todoListId: string, title: string): AppThunk =>
   (dispatch) => {
+    dispatch(setStatusAC("loading"));
     tasksAPI.createTask(todoListId, title).then((res) => {
       dispatch(addTaskAC(res.data.data.item));
+      dispatch(setStatusAC("succeeded"));
     });
   };
 
@@ -194,15 +198,29 @@ export const updateTaskTC =
       deadline: task.deadline,
       ...model,
     };
-
+    dispatch(setStatusAC("loading"));
     tasksAPI.updateTask(todoListId, taskId, apiModel).then((res) => {
-      dispatch(updateTaskAC(todoListId, taskId, res.data.data.item));
+      if (!res.data.resultCode) {
+        dispatch(updateTaskAC(todoListId, taskId, res.data.data.item));
+        dispatch(setStatusAC("succeeded"));
+      } else {
+        if (res.data.messages.length) {
+          dispatch(setErrorAC(res.data.messages[0]));
+        } else {
+          dispatch(setErrorAC("some error"));
+        }
+        dispatch(setStatusAC("failed"));
+      }
     });
   };
 
 export const deleteTaskTC =
   (todoListId: string, taskId: string): AppThunk =>
   async (dispatch) => {
+    dispatch(setStatusAC("loading"));
     const res = await tasksAPI.deleteTask(todoListId, taskId);
-    dispatch(deleteTaskAC(todoListId, taskId));
+    if (!res.data.resultCode) {
+      dispatch(deleteTaskAC(todoListId, taskId));
+      dispatch(setStatusAC("succeeded"));
+    }
   };

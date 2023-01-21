@@ -9,8 +9,10 @@ import { taskReducer } from "./task-reducer";
 import thunk, { ThunkDispatch, ThunkAction } from "redux-thunk";
 import { ActionType, StoreType } from "./redux-type/redux-type";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { appReducer } from "./app-reducer";
 
 export const rootReducer = combineReducers({
+  appStatus: appReducer,
   todoListData: todoListReducer,
   tasksListData: taskReducer,
 });

@@ -1,8 +1,11 @@
+import { StatusType } from "../../BLL/redux/app-reducer";
+
 export type TodoListDataType = {
   id: string;
   title: string;
   addedDate: string;
   order: number;
+  entityStatus: StatusType;
 };
 
 export type ResponseType<T = {}> = {

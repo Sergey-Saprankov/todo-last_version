@@ -10,7 +10,8 @@ type TaskType = {
   todoListId: string;
 };
 
-export const Tasks: React.FC<TaskType> = ({ todoListId }) => {
+export const Tasks: React.FC<TaskType> = React.memo(({ todoListId }) => {
+  console.log("task");
   const [addTaskModal, setAddTaskModal] = useState(false);
   const [taskId, setTaskId] = useState("");
   const tasks = useAppSelector<TaskStateType>((state) => state.tasksListData);
@@ -64,4 +65,4 @@ export const Tasks: React.FC<TaskType> = ({ todoListId }) => {
       )}
     </div>
   );
-};
+});

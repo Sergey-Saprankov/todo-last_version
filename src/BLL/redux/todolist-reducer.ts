@@ -8,6 +8,7 @@ import { Dispatch } from "redux";
 import { todoListAPI } from "../../api/todolist-api";
 import { TodoListDataType } from "../../api/api-types/api-types";
 import { AppThunk } from "./store";
+import { setStatusAC } from "./app-reducer";
 
 export const initialState: TodoEntityType[] = [];
 
@@ -19,7 +20,7 @@ export const todoListReducer = (
     case "SET-TODOS":
       return action.todos;
     case "ADD-TODO-LIST":
-      return [action.todo, ...state];
+      return [{ ...action.todo, entityStatus: "idle" }, ...state];
     case "REMOVE-TODO-LIST":
       return [...state.filter((t) => t.id !== action.todoListId)];
     // case 'CHANGE-FILTER':
@@ -79,31 +80,39 @@ export const setTodolistAC = (todos: TodoEntityType[]) => {
 };
 
 export const getTodosTC = (): AppThunk => (dispatch) => {
+  dispatch(setStatusAC("loading"));
   todoListAPI.getTodoLists().then((res) => {
     dispatch(setTodolistAC(res.data));
+    dispatch(setStatusAC("succeeded"));
   });
 };
 
 export const deleteTodoListTC =
   (todoListId: string): AppThunk =>
   (dispatch) => {
+    dispatch(setStatusAC("loading"));
     todoListAPI.deleteTodoList(todoListId).then((res) => {
       dispatch(removeTodoListAC(todoListId));
+      dispatch(setStatusAC("succeeded"));
     });
   };
 
 export const addTodoListTC =
   (title: string): AppThunk =>
   (dispatch) => {
+    dispatch(setStatusAC("loading"));
     todoListAPI.createTodoList(title).then((res) => {
       dispatch(addTodoListAC(res.data.data.item));
+      dispatch(setStatusAC("succeeded"));
     });
   };
 
 export const updateTodoListTitle =
   (todoListId: string, title: string): AppThunk =>
   (dispatch) => {
+    dispatch(setStatusAC("loading"));
     todoListAPI.updateTodoList(todoListId, title).then((res) => {
       dispatch(changeTodoListTitleAC(todoListId, title));
+      dispatch(setStatusAC("succeeded"));
     });
   };

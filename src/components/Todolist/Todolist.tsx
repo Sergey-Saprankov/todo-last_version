@@ -7,7 +7,9 @@ import { addTaskTC, getTasksTC } from "../../BLL/redux/task-reducer";
 import { Tasks } from "../Task/Tasks";
 import { useParams } from "react-router-dom";
 import { TodoEntityType } from "../../BLL/redux/redux-type/redux-type";
-import { updateTodoListTitle } from "../../BLL/redux/todolist-reducer";
+import Loading from "../Loading/Loading";
+import { StatusType } from "../../BLL/redux/app-reducer";
+import Message from "../Message/Message";
 
 type TodolistType = {
   visible: boolean;
@@ -19,6 +21,9 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ visible }) => {
   const todoLists = useAppSelector<TodoEntityType[]>(
     (state) => state.todoListData
   );
+
+  const status = useAppSelector<StatusType>((state) => state.appStatus.status);
+  const error = useAppSelector<string | null>((state) => state.appStatus.error);
   const currentTodo = todoLists.find((tl) => tl.id === id);
   const title = currentTodo?.title || "";
   const dispatch = AppDispatch();
@@ -44,6 +49,8 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ visible }) => {
 
   return (
     <div className={s.container}>
+      {error && <Message />}
+      {status === "loading" && <Loading />}
       <div
         className={
           visible ? s.wrapper : `${s.wrapper} ${s.sizeWrapperHideSidebar}`

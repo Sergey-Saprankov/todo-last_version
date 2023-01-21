@@ -1,0 +1,50 @@
+.loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    width: 100%;
+    height: 5px;
+    background: #f1f1f1;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, .2);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.loading:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 0;
+    height: 100%;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+    animation: load 2s ease-in-out infinite;
+}
+
+@keyframes load {
+    0% {
+        width: 0;
+        background: #8c66d0;
+    }
+
+    25% {
+        width: 40%;
+        background: #8c66d0;
+    }
+
+    50% {
+        width: 60%;
+        background: #8c66d0;
+    }
+
+    75% {
+        width: 75%;
+        background: #8c66d0;
+    }
+
+    100% {
+        width: 100%;
+        background: #8c66d0;
+    }
+}
