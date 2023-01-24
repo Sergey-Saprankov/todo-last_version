@@ -26,7 +26,7 @@ export const Sidebar = React.memo(() => {
   // const dispatch = useDispatch();
 
   const addTodoHandler = () => {
-    dispatch(setModalStatusAC(true));
+    dispatch(setModalStatusAC(true, "newTodoModal"));
   };
 
   const todoListsMap = todoLists?.map((t) => {

@@ -6,12 +6,12 @@ import { AppDispatch, useAppSelector } from "../../BLL/redux/store";
 import { setModalStatusAC } from "../../BLL/redux/app-reducer";
 
 export const AddNewTodo = React.memo(() => {
-  const isOpen = useAppSelector((state) => state.appStatus.isOpen);
+  const isOpen = useAppSelector((state) => state.appStatus.newTodoModal.isOpen);
   const dispatch = AppDispatch();
   const [newTodoTitle, setNewTodoTitle] = useState("");
   const [error, setError] = useState("");
   const onClickHandler = () => {
-    dispatch(setModalStatusAC(false));
+    dispatch(setModalStatusAC(false, "newTodoModal"));
   };
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +24,7 @@ export const AddNewTodo = React.memo(() => {
         dispatch(addTodoListTC(newTodoTitle));
         setNewTodoTitle("");
         setError("");
-        dispatch(setModalStatusAC(false));
+        dispatch(setModalStatusAC(false, "newTodoModal"));
       } else {
         setError("Please add To-do List Name");
       }
@@ -36,7 +36,7 @@ export const AddNewTodo = React.memo(() => {
       dispatch(addTodoListTC(newTodoTitle));
       setNewTodoTitle("");
       setError("");
-      dispatch(setModalStatusAC(false));
+      dispatch(setModalStatusAC(false, "newTodoModal"));
     } else {
       setError("Please add To-do List Name");
     }

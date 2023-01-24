@@ -8,17 +8,12 @@
     background: #2B2C37;
     border-radius: 6px;
     border: 1px solid #fff;
+    display: none;
 }
 
-.closeModal {
-    /*animation: close 1s linear;*/
-    transform: translate(-50%, -300%);
-    transition: all 1s;
-}
 
 .openModal {
-    transform: translate(-50%, -50%);
-    transition: all 1s;
+    display: block;
     /*animation-name: open;*/
     /*animation-duration: 3s;*/
 }
@@ -126,8 +121,6 @@
 .delete {
     background: #EA5555;
 }
-
-
 
 
 /*@keyframes open {*/

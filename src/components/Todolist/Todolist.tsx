@@ -8,7 +8,7 @@ import { Tasks } from "../Task/Tasks";
 import { useParams } from "react-router-dom";
 import { TodoEntityType } from "../../BLL/redux/redux-type/redux-type";
 import Loading from "../Loading/Loading";
-import { StatusType } from "../../BLL/redux/app-reducer";
+import { setModalStatusAC, StatusType } from "../../BLL/redux/app-reducer";
 import Message from "../Message/Message";
 
 export const Todolist = React.memo(() => {
@@ -17,7 +17,9 @@ export const Todolist = React.memo(() => {
   const todoLists = useAppSelector<TodoEntityType[]>(
     (state) => state.todoListData
   );
-
+  const isOpen = useAppSelector(
+    (state) => state.appStatus.editTodoModal.isOpen
+  );
   const status = useAppSelector<StatusType>((state) => state.appStatus.status);
   const error = useAppSelector<string | null>((state) => state.appStatus.error);
   const currentTodo = todoLists.find((tl) => tl.id === id);
@@ -36,11 +38,9 @@ export const Todolist = React.memo(() => {
     dispatch(addTaskTC(id, "New Task"));
   };
 
-  const [modalEdit, setModalEdit] = useState(false);
-
   if (!id) return null;
   const openEditModalHandler = () => {
-    setModalEdit(true);
+    dispatch(setModalStatusAC(true, "editTodoModal"));
   };
 
   return (
@@ -63,7 +63,7 @@ export const Todolist = React.memo(() => {
           <Tasks todoListId={id} />
         </div>
       </div>
-      {modalEdit && <EditTodo todolistId={id} title={title} />}
+      {isOpen && <EditTodo todolistId={id} title={title} />}
     </div>
   );
 });

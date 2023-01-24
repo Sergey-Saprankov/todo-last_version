@@ -19,7 +19,9 @@ type AddNewBoardType = {
 export const EditTodo: React.FC<AddNewBoardType> = React.memo(
   ({ todolistId, title }) => {
     const dispatch = AppDispatch();
-    const isOpen = useAppSelector((state) => state.appStatus.isOpen);
+    const isOpen = useAppSelector(
+      (state) => state.appStatus.editTodoModal.isOpen
+    );
     const [newTodoTitle, setNewTodoTitle] = useState(title);
     const [error, setError] = useState("");
 
@@ -30,7 +32,7 @@ export const EditTodo: React.FC<AddNewBoardType> = React.memo(
     }, [title]);
 
     const onClickHandler = () => {
-      dispatch(setModalStatusAC(false));
+      dispatch(setModalStatusAC(false, "editTodoModal"));
     };
 
     const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +43,7 @@ export const EditTodo: React.FC<AddNewBoardType> = React.memo(
       if (newTodoTitle.trim()) {
         dispatch(updateTodoListTitle(todolistId, newTodoTitle));
         setError("");
-        dispatch(setModalStatusAC(false));
+        dispatch(setModalStatusAC(false, "editTodoModal"));
       } else {
         setError("Please add To-do List Name");
       }
@@ -49,15 +51,11 @@ export const EditTodo: React.FC<AddNewBoardType> = React.memo(
 
     const deleteToDoHandler = () => {
       dispatch(deleteTodoListTC(todolistId));
-      dispatch(setModalStatusAC(false));
+      dispatch(setModalStatusAC(false, "editTodoModal"));
     };
     return (
       <div
-        className={
-          isOpen
-            ? `${s.container} ${s.openModal}`
-            : `${s.container} ${s.closeModal}`
-        }
+        className={isOpen ? `${s.container} ${s.openModal}` : `${s.container} `}
       >
         <button onClick={onClickHandler} className={s.close}>
           <img className={s.closeImg} src={close} alt="close" />

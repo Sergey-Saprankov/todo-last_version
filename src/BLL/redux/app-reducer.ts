@@ -4,13 +4,31 @@ export type StatusType = "idle" | "loading" | "succeeded" | "failed";
 export type InitialStatusStateType = {
   status: StatusType;
   error: string | null;
-  isOpen: boolean;
+  newTodoModal: {
+    isOpen: boolean;
+  };
+  editTodoModal: {
+    isOpen: boolean;
+  };
+
+  editTaskModal: {
+    isOpen: boolean;
+  };
 };
 
 const initialStatusState: InitialStatusStateType = {
   status: "idle",
   error: null,
-  isOpen: false,
+  newTodoModal: {
+    isOpen: false,
+  },
+  editTodoModal: {
+    isOpen: false,
+  },
+
+  editTaskModal: {
+    isOpen: false,
+  },
 };
 
 export const appReducer = (
@@ -24,7 +42,7 @@ export const appReducer = (
     case "APP/SET-ERROR":
       return { ...state, error: action.error };
     case "SET-MODAL-STATUS":
-      return { ...state, isOpen: action.isOpen };
+      return { ...state, [action.modal]: { isOpen: action.isOpen } };
     default:
       return state;
   }
@@ -44,9 +62,10 @@ export const setErrorAC = (error: string | null) => {
   } as const;
 };
 
-export const setModalStatusAC = (isOpen: boolean) => {
+export const setModalStatusAC = (isOpen: boolean, modal: string) => {
   return {
     type: "SET-MODAL-STATUS",
     isOpen,
+    modal,
   } as const;
 };
