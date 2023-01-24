@@ -8,18 +8,18 @@ import {
   removeTodoListAC,
   updateTodoListTitle,
 } from "../../BLL/redux/todolist-reducer";
-import { AppDispatch } from "../../BLL/redux/store";
+import { AppDispatch, useAppSelector } from "../../BLL/redux/store";
+import { setModalStatusAC } from "../../BLL/redux/app-reducer";
 
 type AddNewBoardType = {
   todolistId: string;
-  modalTodo: boolean;
-  setModalTodo: (value: boolean) => void;
   title: string;
 };
 
 export const EditTodo: React.FC<AddNewBoardType> = React.memo(
-  ({ todolistId, setModalTodo, modalTodo, title }) => {
-    console.log("EditTodo");
+  ({ todolistId, title }) => {
+    const dispatch = AppDispatch();
+    const isOpen = useAppSelector((state) => state.appStatus.isOpen);
     const [newTodoTitle, setNewTodoTitle] = useState(title);
     const [error, setError] = useState("");
 
@@ -29,11 +29,8 @@ export const EditTodo: React.FC<AddNewBoardType> = React.memo(
       }
     }, [title]);
 
-    // const selector = (state: StoreType) => state.todoListData;
-    // const todoLists = useSelector(selector)
-    const dispatch = AppDispatch();
     const onClickHandler = () => {
-      setModalTodo(false);
+      dispatch(setModalStatusAC(false));
     };
 
     const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +41,7 @@ export const EditTodo: React.FC<AddNewBoardType> = React.memo(
       if (newTodoTitle.trim()) {
         dispatch(updateTodoListTitle(todolistId, newTodoTitle));
         setError("");
-        setModalTodo(false);
+        dispatch(setModalStatusAC(false));
       } else {
         setError("Please add To-do List Name");
       }
@@ -52,12 +49,12 @@ export const EditTodo: React.FC<AddNewBoardType> = React.memo(
 
     const deleteToDoHandler = () => {
       dispatch(deleteTodoListTC(todolistId));
-      setModalTodo(false);
+      dispatch(setModalStatusAC(false));
     };
     return (
       <div
         className={
-          modalTodo
+          isOpen
             ? `${s.container} ${s.openModal}`
             : `${s.container} ${s.closeModal}`
         }

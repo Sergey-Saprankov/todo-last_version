@@ -63,14 +63,7 @@ export const Todolist = React.memo(() => {
           <Tasks todoListId={id} />
         </div>
       </div>
-      {modalEdit && (
-        <EditTodo
-          todolistId={id}
-          modalTodo={modalEdit}
-          setModalTodo={setModalEdit}
-          title={title}
-        />
-      )}
+      {modalEdit && <EditTodo todolistId={id} title={title} />}
     </div>
   );
 });
