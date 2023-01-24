@@ -20,7 +20,7 @@ import {
   TaskDataType,
   TodoListDataType,
 } from "../../../api/api-types/api-types";
-import { setErrorAC, setStatusAC } from "../app-reducer";
+import { setErrorAC, setModalStatusAC, setStatusAC } from "../app-reducer";
 
 export type AddTaskACType = ReturnType<typeof addTaskAC>;
 export type ChangeTaskPriorityACType = ReturnType<typeof changeTaskPriorityAC>;
@@ -42,6 +42,7 @@ export type ChangeTodoListTitleACType = ReturnType<
 >;
 export type SetTodolistACType = ReturnType<typeof setTodolistAC>;
 export type SetTasksACType = ReturnType<typeof setTasksAC>;
+export type SetModalStatusACTypes = ReturnType<typeof setModalStatusAC>;
 
 export type ActionType =
   | AddTodoListACType
@@ -58,7 +59,8 @@ export type ActionType =
   | SetTasksACType
   | UpdateTaskACType
   | SetStatusACType
-  | SetErrorACType;
+  | SetErrorACType
+  | SetModalStatusACTypes;
 
 // export type TaskType = {
 //     taskId: string

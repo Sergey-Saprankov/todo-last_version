@@ -23,13 +23,8 @@ function App() {
     <div className={"container"}>
       <Header />
       <Main visible={visible} />
-      <Sidebar
-        callBack={setVisibleTodoCallBack}
-        visible={visible}
-        modalTodo={modalTodo}
-        setModalTodo={setModalTodoCallBack}
-      />
-      <AddNewTodo modalTodo={modalTodo} setModalTodo={setModalTodoCallBack} />
+      <Sidebar callBack={setVisibleTodoCallBack} visible={visible} />
+      <AddNewTodo />
     </div>
   );
 }

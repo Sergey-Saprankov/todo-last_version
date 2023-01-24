@@ -14,19 +14,17 @@ import {
   TodoEntityType,
 } from "../../BLL/redux/redux-type/redux-type";
 import { NavLink } from "react-router-dom";
-import { useAppSelector } from "../../BLL/redux/store";
+import { AppDispatch, useAppSelector } from "../../BLL/redux/store";
+import { setModalStatusAC } from "../../BLL/redux/app-reducer";
 
 type SidebarType = {
   callBack: (value: boolean) => void;
   visible: boolean;
-  modalTodo: boolean;
-  setModalTodo: (value: boolean) => void;
 };
 
 export const Sidebar: React.FC<SidebarType> = React.memo(
-  ({ callBack, visible, modalTodo, setModalTodo }) => {
-    console.log("sidebar");
-
+  ({ callBack, visible }) => {
+    const dispatch = AppDispatch();
     const todoLists = useAppSelector<TodoEntityType[]>(
       (state) => state.todoListData
     );
@@ -34,7 +32,7 @@ export const Sidebar: React.FC<SidebarType> = React.memo(
     // const dispatch = useDispatch();
 
     const addTodoHandler = () => {
-      setModalTodo(!modalTodo);
+      dispatch(setModalStatusAC(true));
     };
 
     const todoListsMap = todoLists?.map((t) => {
