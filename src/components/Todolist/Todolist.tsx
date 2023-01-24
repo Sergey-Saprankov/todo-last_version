@@ -11,11 +11,7 @@ import Loading from "../Loading/Loading";
 import { StatusType } from "../../BLL/redux/app-reducer";
 import Message from "../Message/Message";
 
-type TodolistType = {
-  visible: boolean;
-};
-
-export const Todolist: React.FC<TodolistType> = React.memo(({ visible }) => {
+export const Todolist = React.memo(() => {
   const { id } = useParams<{ id: string }>();
 
   const todoLists = useAppSelector<TodoEntityType[]>(
@@ -51,11 +47,7 @@ export const Todolist: React.FC<TodolistType> = React.memo(({ visible }) => {
     <div className={s.container}>
       {error && <Message />}
       {status === "loading" && <Loading />}
-      <div
-        className={
-          visible ? s.wrapper : `${s.wrapper} ${s.sizeWrapperHideSidebar}`
-        }
-      >
+      <div className={`s.wrapper`}>
         <div className={s.settingContainer}>
           <div>
             <button onClick={addTaskHandler} className={s.addTask}>

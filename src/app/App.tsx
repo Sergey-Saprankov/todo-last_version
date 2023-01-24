@@ -9,11 +9,6 @@ import { AddNewTodo } from "../components/AddNewBoard/AddNewTodo";
 
 function App() {
   const dispatch = AppDispatch();
-  const [visible, setVisible] = useState(true);
-  const [modalTodo, setModalTodo] = useState(false);
-
-  const setModalTodoCallBack = useCallback(setModalTodo, []);
-  const setVisibleTodoCallBack = useCallback(setVisible, []);
 
   useEffect(() => {
     dispatch(getTodosTC());
@@ -22,8 +17,8 @@ function App() {
   return (
     <div className={"container"}>
       <Header />
-      <Main visible={visible} />
-      <Sidebar callBack={setVisibleTodoCallBack} visible={visible} />
+      <Main />
+      <Sidebar />
       <AddNewTodo />
     </div>
   );
