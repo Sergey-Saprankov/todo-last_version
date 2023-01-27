@@ -1,37 +1,38 @@
 import React, { useEffect, useState } from "react";
 import s from "./Todolist.module.css";
 import setting from "./img/setting.svg";
-import { EditTodo } from "../EditToDo/EditTodo";
 import { AppDispatch, useAppSelector } from "../../BLL/redux/store";
 import { addTaskTC, getTasksTC } from "../../BLL/redux/task-reducer";
-import { Tasks } from "../Task/Tasks";
 import { useParams } from "react-router-dom";
 import { TodoEntityType } from "../../BLL/redux/redux-type/redux-type";
-import Loading from "../Loading/Loading";
 import { setModalStatusAC, StatusType } from "../../BLL/redux/app-reducer";
+import { Tasks } from "../Task/Tasks";
+import { EditTodo } from "../EditToDo/EditTodo";
 import Message from "../Message/Message";
-import { AddNewTodo } from "../AddNewBoard/AddNewTodo";
+import Loading from "../Loading/Loading";
 
 export const Todolist = React.memo(() => {
+  const dispatch = AppDispatch();
   const { id } = useParams<{ id: string }>();
+  const [currentId, setCurrentId] = useState(id);
+
+  useEffect(() => {
+    if (!id) return;
+    setCurrentId(id);
+    dispatch(getTasksTC(id));
+  }, [currentId]);
 
   const todoLists = useAppSelector<TodoEntityType[]>(
     (state) => state.todoListData
   );
-  const isOpen = useAppSelector(
-    (state) => state.appStatus.editTodoModal.isOpen
-  );
-  const status = useAppSelector<StatusType>((state) => state.appStatus.status);
-  const error = useAppSelector<string | null>((state) => state.appStatus.error);
+  const {
+    status,
+    editTodoModal: { isOpen },
+  } = useAppSelector((state) => state.appStatus);
+
   const currentTodo = todoLists.find((tl) => tl.id === id);
+
   const title = currentTodo?.title || "";
-  const dispatch = AppDispatch();
-
-  useEffect(() => {
-    if (!id) return;
-
-    dispatch(getTasksTC(id));
-  }, [id]);
 
   const addTaskHandler = () => {
     if (!id) return;
@@ -46,7 +47,7 @@ export const Todolist = React.memo(() => {
 
   return (
     <div className={s.container}>
-      {error && <Message />}
+      <Message />
       {status === "loading" && <Loading />}
       <div className={s.wrapper}>
         <div className={s.settingContainer}>

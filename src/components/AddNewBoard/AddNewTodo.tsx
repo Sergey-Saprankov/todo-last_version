@@ -8,7 +8,6 @@ import { useParams } from "react-router-dom";
 
 export const AddNewTodo = React.memo(() => {
   const isOpen = useAppSelector((state) => state.appStatus.newTodoModal.isOpen);
-  console.log(isOpen);
   const dispatch = AppDispatch();
   const [newTodoTitle, setNewTodoTitle] = useState("");
   const [error, setError] = useState("");

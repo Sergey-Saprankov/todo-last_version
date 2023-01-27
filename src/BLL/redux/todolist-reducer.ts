@@ -23,8 +23,6 @@ export const todoListReducer = (
       return [{ ...action.todo, entityStatus: "idle" }, ...state];
     case "REMOVE-TODO-LIST":
       return [...state.filter((t) => t.id !== action.todoListId)];
-    // case 'CHANGE-FILTER':
-    //     return [...state.map(t => t.id === action.todoListId ? {...t, filter: action.filter} : t)]
     case "CHANGE-TODO-LIST-TITLE":
       return [
         ...state.map((t) =>

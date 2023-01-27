@@ -157,8 +157,17 @@ export const addTaskTC =
   (dispatch) => {
     dispatch(setStatusAC("loading"));
     tasksAPI.createTask(todoListId, title).then((res) => {
-      dispatch(addTaskAC(res.data.data.item));
-      dispatch(setStatusAC("succeeded"));
+      if (!res.data.resultCode) {
+        dispatch(addTaskAC(res.data.data.item));
+        dispatch(setStatusAC("succeeded"));
+      } else {
+        if (res.data.messages) {
+          dispatch(setErrorAC(res.data.messages[0]));
+        } else {
+          dispatch(setErrorAC("Sorry, technical problem"));
+        }
+        dispatch(setStatusAC("failed"));
+      }
     });
   };
 
