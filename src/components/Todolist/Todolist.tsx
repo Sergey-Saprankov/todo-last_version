@@ -10,6 +10,7 @@ import { TodoEntityType } from "../../BLL/redux/redux-type/redux-type";
 import Loading from "../Loading/Loading";
 import { setModalStatusAC, StatusType } from "../../BLL/redux/app-reducer";
 import Message from "../Message/Message";
+import { AddNewTodo } from "../AddNewBoard/AddNewTodo";
 
 export const Todolist = React.memo(() => {
   const { id } = useParams<{ id: string }>();
@@ -47,7 +48,7 @@ export const Todolist = React.memo(() => {
     <div className={s.container}>
       {error && <Message />}
       {status === "loading" && <Loading />}
-      <div className={`s.wrapper`}>
+      <div className={s.wrapper}>
         <div className={s.settingContainer}>
           <div>
             <button onClick={addTaskHandler} className={s.addTask}>

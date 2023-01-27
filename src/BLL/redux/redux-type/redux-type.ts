@@ -11,6 +11,7 @@ import {
 import {
   addTodoListAC,
   changeFilterTodoListAC,
+  changeTodolistEntityStatusAC,
   changeTodoListTitleAC,
   removeTodoListAC,
   setTodolistAC,
@@ -43,6 +44,9 @@ export type ChangeTodoListTitleACType = ReturnType<
 export type SetTodolistACType = ReturnType<typeof setTodolistAC>;
 export type SetTasksACType = ReturnType<typeof setTasksAC>;
 export type SetModalStatusACTypes = ReturnType<typeof setModalStatusAC>;
+export type ChangeTodolistEntityStatusACType = ReturnType<
+  typeof changeTodolistEntityStatusAC
+>;
 
 export type ActionType =
   | AddTodoListACType
@@ -60,7 +64,8 @@ export type ActionType =
   | UpdateTaskACType
   | SetStatusACType
   | SetErrorACType
-  | SetModalStatusACTypes;
+  | SetModalStatusACTypes
+  | ChangeTodolistEntityStatusACType;
 
 // export type TaskType = {
 //     taskId: string

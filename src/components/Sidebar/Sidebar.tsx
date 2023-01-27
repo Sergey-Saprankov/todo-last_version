@@ -7,12 +7,7 @@ import { FormControlLabel, Switch } from "@mui/material";
 import light from "../../img/light.svg";
 import dark from "../../img/dark.svg";
 import hide from "../../img/hide.svg";
-import visibleImg from "../../img/visible.svg";
-import { useSelector } from "react-redux";
-import {
-  StoreType,
-  TodoEntityType,
-} from "../../BLL/redux/redux-type/redux-type";
+import { TodoEntityType } from "../../BLL/redux/redux-type/redux-type";
 import { NavLink } from "react-router-dom";
 import { AppDispatch, useAppSelector } from "../../BLL/redux/store";
 import { setModalStatusAC } from "../../BLL/redux/app-reducer";
@@ -22,8 +17,6 @@ export const Sidebar = React.memo(() => {
   const todoLists = useAppSelector<TodoEntityType[]>(
     (state) => state.todoListData
   );
-
-  // const dispatch = useDispatch();
 
   const addTodoHandler = () => {
     dispatch(setModalStatusAC(true, "newTodoModal"));

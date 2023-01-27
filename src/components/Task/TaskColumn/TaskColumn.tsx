@@ -14,7 +14,6 @@ type TaskColumnType = {
 const TaskColumn: React.FC<TaskColumnType> = React.memo(({ tasks, title }) => {
   const [taskId, setTaskId] = useState("");
   const [task] = tasks.filter((t) => t.id === taskId);
-
   const isOpen = useAppSelector(
     (state) => state.appStatus.editTaskModal.isOpen
   );

@@ -22,6 +22,10 @@ export const EditTodo: React.FC<AddNewBoardType> = React.memo(
     const isOpen = useAppSelector(
       (state) => state.appStatus.editTodoModal.isOpen
     );
+    const [{ entityStatus }] = useAppSelector((state) =>
+      state.todoListData.filter((t) => t.id === todolistId)
+    );
+
     const [newTodoTitle, setNewTodoTitle] = useState(title);
     const [error, setError] = useState("");
 
@@ -43,55 +47,76 @@ export const EditTodo: React.FC<AddNewBoardType> = React.memo(
       if (newTodoTitle.trim()) {
         dispatch(updateTodoListTitle(todolistId, newTodoTitle));
         setError("");
-        dispatch(setModalStatusAC(false, "editTodoModal"));
       } else {
         setError("Please add To-do List Name");
       }
     };
+
+    // const editTodoListOnEnter = () => {
+    //   if (newTodoTitle.trim()) {
+    //     dispatch(updateTodoListTitle(todolistId, newTodoTitle));
+    //     setError("");
+    //     dispatch(setModalStatusAC(false, "editTodoModal"));
+    //   } else {
+    //     setError("Please add To-do List Name");
+    //   }
+    // };
 
     const deleteToDoHandler = () => {
       dispatch(deleteTodoListTC(todolistId));
       dispatch(setModalStatusAC(false, "editTodoModal"));
     };
     return (
-      <div
-        className={isOpen ? `${s.container} ${s.openModal}` : `${s.container} `}
-      >
-        <button onClick={onClickHandler} className={s.close}>
-          <img className={s.closeImg} src={close} alt="close" />
-        </button>
-        <div className={s.innerWrapper}>
-          <h2 className={s.title}>Edit To-do List</h2>
-          <div className={s.addNameContainer}>
-            <div className={s.text}>To-do List Name</div>
+      <div className={isOpen ? `${s.wrapper} ${s.openModal}` : s.wrapper}>
+        <div
+          className={
+            isOpen ? `${s.container} ${s.openModal}` : `${s.container} `
+          }
+        >
+          <button onClick={onClickHandler} className={s.close}>
+            <img className={s.closeImg} src={close} alt="close" />
+          </button>
+          <div className={s.innerWrapper}>
+            <h2 className={s.title}>Edit To-do List</h2>
+            <div className={s.addNameContainer}>
+              <div className={s.text}>To-do List Name</div>
 
-            <input
-              value={newTodoTitle}
-              onChange={onChangeName}
-              className={
-                error
-                  ? `${s.changeName} ${s.text} ${s.error}`
-                  : `${s.changeName} ${s.text}`
-              }
-              type="text"
-              placeholder={"Please add To-do List Name"}
-            />
+              <input
+                disabled={entityStatus === "loading"}
+                // onKeyDown={editTodoListOnEnter}
+                value={newTodoTitle}
+                onChange={onChangeName}
+                className={
+                  error
+                    ? `${s.changeName} ${s.text} ${s.error}`
+                    : `${s.changeName} ${s.text}`
+                }
+                type="text"
+                placeholder={"Please add To-do List Name"}
+              />
+            </div>
+            <div className={s.columnsWrapper}>
+              <div className={s.text}>To-do Columns</div>
+              <div className={s.item}>todo</div>
+              <div className={s.item}>doing</div>
+              <div className={s.item}>done</div>
+              <div className={s.item}>draft</div>
+            </div>
+            <button
+              disabled={entityStatus === "loading"}
+              onClick={deleteToDoHandler}
+              className={`${s.btn} ${s.delete}`}
+            >
+              Delete
+            </button>
+            <button
+              disabled={entityStatus === "loading"}
+              onClick={addedNewToDoHandler}
+              className={s.btn}
+            >
+              Save Changes
+            </button>
           </div>
-          <div className={s.columnsWrapper}>
-            <div className={s.text}>To-do Columns</div>
-            <div className={s.item}>todo</div>
-            <div className={s.item}>doing</div>
-            <div className={s.item}>done</div>
-          </div>
-          <button
-            onClick={deleteToDoHandler}
-            className={`${s.btn} ${s.delete}`}
-          >
-            Delete
-          </button>
-          <button onClick={addedNewToDoHandler} className={s.btn}>
-            Save Changes
-          </button>
         </div>
       </div>
     );

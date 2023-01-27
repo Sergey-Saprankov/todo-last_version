@@ -8,7 +8,7 @@ import { Dispatch } from "redux";
 import { todoListAPI } from "../../api/todolist-api";
 import { TodoListDataType } from "../../api/api-types/api-types";
 import { AppThunk } from "./store";
-import { setStatusAC } from "./app-reducer";
+import { setStatusAC, StatusType } from "./app-reducer";
 
 export const initialState: TodoEntityType[] = [];
 
@@ -29,6 +29,12 @@ export const todoListReducer = (
       return [
         ...state.map((t) =>
           t.id === action.todoListId ? { ...t, title: action.todoListTitle } : t
+        ),
+      ];
+    case "CHANGE-TODOLIST-ENTITY-STATUS":
+      return [
+        ...state.map((t) =>
+          t.id === action.id ? { ...t, entityStatus: action.entityStatus } : t
         ),
       ];
     default:
@@ -90,10 +96,12 @@ export const getTodosTC = (): AppThunk => (dispatch) => {
 export const deleteTodoListTC =
   (todoListId: string): AppThunk =>
   (dispatch) => {
+    dispatch(changeTodolistEntityStatusAC(todoListId, "loading"));
     dispatch(setStatusAC("loading"));
     todoListAPI.deleteTodoList(todoListId).then((res) => {
       dispatch(removeTodoListAC(todoListId));
       dispatch(setStatusAC("succeeded"));
+      dispatch(changeTodolistEntityStatusAC(todoListId, "succeeded"));
     });
   };
 
@@ -110,9 +118,22 @@ export const addTodoListTC =
 export const updateTodoListTitle =
   (todoListId: string, title: string): AppThunk =>
   (dispatch) => {
+    dispatch(changeTodolistEntityStatusAC(todoListId, "loading"));
     dispatch(setStatusAC("loading"));
     todoListAPI.updateTodoList(todoListId, title).then((res) => {
       dispatch(changeTodoListTitleAC(todoListId, title));
       dispatch(setStatusAC("succeeded"));
+      dispatch(changeTodolistEntityStatusAC(todoListId, "succeeded"));
     });
   };
+
+export const changeTodolistEntityStatusAC = (
+  id: string,
+  entityStatus: StatusType
+) => {
+  return {
+    type: "CHANGE-TODOLIST-ENTITY-STATUS",
+    id,
+    entityStatus,
+  } as const;
+};
