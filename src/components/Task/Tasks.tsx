@@ -10,7 +10,7 @@ type TaskType = {
 
 export const Tasks: React.FC<TaskType> = React.memo(({ todoListId }) => {
   const tasks = useAppSelector<TaskStateType>((state) => state.tasksListData);
-  console.log("task");
+
   const currentTasks = tasks[todoListId];
 
   if (!currentTasks) return null;

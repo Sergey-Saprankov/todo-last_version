@@ -3,7 +3,7 @@ import s from "./Todolist.module.css";
 import setting from "./img/setting.svg";
 import { AppDispatch, useAppSelector } from "../../BLL/redux/store";
 import { addTaskTC, getTasksTC } from "../../BLL/redux/task-reducer";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { TodoEntityType } from "../../BLL/redux/redux-type/redux-type";
 import { setModalStatusAC, StatusType } from "../../BLL/redux/app-reducer";
 import { Tasks } from "../Task/Tasks";
@@ -14,13 +14,11 @@ import Loading from "../Loading/Loading";
 export const Todolist = React.memo(() => {
   const dispatch = AppDispatch();
   const { id } = useParams<{ id: string }>();
-  const [currentId, setCurrentId] = useState(id);
 
   useEffect(() => {
     if (!id) return;
-    setCurrentId(id);
     dispatch(getTasksTC(id));
-  }, [currentId]);
+  }, [id]);
 
   const todoLists = useAppSelector<TodoEntityType[]>(
     (state) => state.todoListData

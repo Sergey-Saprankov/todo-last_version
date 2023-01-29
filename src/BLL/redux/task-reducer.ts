@@ -1,5 +1,6 @@
 import { ActionType, StoreType, TaskStateType } from "./redux-type/redux-type";
 import {
+  ResponseType,
   TaskDataType,
   TaskModelType,
   TaskPrioritiesType,
@@ -8,6 +9,12 @@ import {
 import { tasksAPI } from "../../api/tasks-api";
 import { AppThunk } from "./store";
 import { setErrorAC, setStatusAC } from "./app-reducer";
+import {
+  handleServerAppError,
+  handleServerNetworkError,
+} from "../../utils/error-utils";
+import { AxiosError, isAxiosError } from "axios";
+import axios from "axios";
 
 const initialStateTask: TaskStateType = {};
 
@@ -31,8 +38,8 @@ export const taskReducer = (
       return {
         ...state,
         [action.task.todoListId]: [
-          ...state[action.task.todoListId],
           action.task,
+          ...state[action.task.todoListId],
         ],
       };
     case "REMOVE-TODO-LIST":
@@ -146,29 +153,35 @@ export const getTasksTC =
   (todoListId: string): AppThunk =>
   (dispatch) => {
     dispatch(setStatusAC("loading"));
-    tasksAPI.getTasks(todoListId).then((res) => {
-      dispatch(setTasksAC(res.data.items, todoListId));
-      dispatch(setStatusAC("succeeded"));
-    });
+    tasksAPI
+      .getTasks(todoListId)
+      .then((res) => {
+        dispatch(setTasksAC(res.data.items, todoListId));
+        dispatch(setStatusAC("succeeded"));
+      })
+      .catch((e) => {
+        dispatch(setStatusAC("failed"));
+        dispatch(setErrorAC(e.message));
+      });
   };
 
 export const addTaskTC =
   (todoListId: string, title: string): AppThunk =>
   (dispatch) => {
     dispatch(setStatusAC("loading"));
-    tasksAPI.createTask(todoListId, title).then((res) => {
-      if (!res.data.resultCode) {
-        dispatch(addTaskAC(res.data.data.item));
-        dispatch(setStatusAC("succeeded"));
-      } else {
-        if (res.data.messages) {
-          dispatch(setErrorAC(res.data.messages[0]));
+    tasksAPI
+      .createTask(todoListId, title)
+      .then((res) => {
+        if (!res.data.resultCode) {
+          dispatch(addTaskAC(res.data.data.item));
+          dispatch(setStatusAC("succeeded"));
         } else {
-          dispatch(setErrorAC("Sorry, technical problem"));
+          handleServerAppError(dispatch, res.data);
         }
-        dispatch(setStatusAC("failed"));
-      }
-    });
+      })
+      .catch((e: AxiosError<{ message: string }>) => {
+        handleServerNetworkError(dispatch, e);
+      });
   };
 
 export type UpdateDomainTaskModelType = {
@@ -208,9 +221,35 @@ export const updateTaskTC =
       ...model,
     };
     dispatch(setStatusAC("loading"));
-    tasksAPI.updateTask(todoListId, taskId, apiModel).then((res) => {
+    tasksAPI
+      .updateTask(todoListId, taskId, apiModel)
+      .then((res) => {
+        if (!res.data.resultCode) {
+          dispatch(updateTaskAC(todoListId, taskId, res.data.data.item));
+          dispatch(setStatusAC("succeeded"));
+        } else {
+          if (res.data.messages.length) {
+            dispatch(setErrorAC(res.data.messages[0]));
+          } else {
+            dispatch(setErrorAC("some error"));
+          }
+          dispatch(setStatusAC("failed"));
+        }
+      })
+      .catch((e: AxiosError) => {
+        handleServerNetworkError(dispatch, e);
+      });
+  };
+
+export const deleteTaskTC =
+  (todoListId: string, taskId: string): AppThunk =>
+  async (dispatch) => {
+    dispatch(setStatusAC("loading"));
+
+    try {
+      const res = await tasksAPI.deleteTask(todoListId, taskId);
       if (!res.data.resultCode) {
-        dispatch(updateTaskAC(todoListId, taskId, res.data.data.item));
+        dispatch(deleteTaskAC(todoListId, taskId));
         dispatch(setStatusAC("succeeded"));
       } else {
         if (res.data.messages.length) {
@@ -220,16 +259,13 @@ export const updateTaskTC =
         }
         dispatch(setStatusAC("failed"));
       }
-    });
-  };
-
-export const deleteTaskTC =
-  (todoListId: string, taskId: string): AppThunk =>
-  async (dispatch) => {
-    dispatch(setStatusAC("loading"));
-    const res = await tasksAPI.deleteTask(todoListId, taskId);
-    if (!res.data.resultCode) {
-      dispatch(deleteTaskAC(todoListId, taskId));
-      dispatch(setStatusAC("succeeded"));
+    } catch (e) {
+      if (axios.isAxiosError<{ message: string }>(e)) {
+        const error = e.response?.data ? e.response?.data.message : e.message;
+        dispatch(setErrorAC(error));
+      }
+      handleServerNetworkError(dispatch, {
+        message: "Sorry, technical problem",
+      });
     }
   };

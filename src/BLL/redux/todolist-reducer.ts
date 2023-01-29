@@ -4,11 +4,10 @@ import {
   FilterTaskType,
   TodoEntityType,
 } from "./redux-type/redux-type";
-import { Dispatch } from "redux";
 import { todoListAPI } from "../../api/todolist-api";
 import { TodoListDataType } from "../../api/api-types/api-types";
 import { AppThunk } from "./store";
-import { setStatusAC, StatusType } from "./app-reducer";
+import { setErrorAC, setStatusAC, StatusType } from "./app-reducer";
 
 export const initialState: TodoEntityType[] = [];
 
@@ -18,7 +17,7 @@ export const todoListReducer = (
 ): TodoEntityType[] => {
   switch (action.type) {
     case "SET-TODOS":
-      return action.todos;
+      return action.todos.map((tl) => ({ ...tl, entityStatus: "idle" }));
     case "ADD-TODO-LIST":
       return [{ ...action.todo, entityStatus: "idle" }, ...state];
     case "REMOVE-TODO-LIST":
@@ -96,11 +95,18 @@ export const deleteTodoListTC =
   (dispatch) => {
     dispatch(changeTodolistEntityStatusAC(todoListId, "loading"));
     dispatch(setStatusAC("loading"));
-    todoListAPI.deleteTodoList(todoListId).then((res) => {
-      dispatch(removeTodoListAC(todoListId));
-      dispatch(setStatusAC("succeeded"));
-      dispatch(changeTodolistEntityStatusAC(todoListId, "succeeded"));
-    });
+    todoListAPI
+      .deleteTodoList(todoListId)
+      .then((res) => {
+        dispatch(removeTodoListAC(todoListId));
+        dispatch(setStatusAC("succeeded"));
+        dispatch(changeTodolistEntityStatusAC(todoListId, "succeeded"));
+      })
+      .catch((e) => {
+        dispatch(changeTodolistEntityStatusAC(todoListId, "failed"));
+        dispatch(setStatusAC("failed"));
+        dispatch(setErrorAC(e.message));
+      });
   };
 
 export const addTodoListTC =

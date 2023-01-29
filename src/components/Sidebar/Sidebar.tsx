@@ -14,7 +14,7 @@ import { setModalStatusAC } from "../../BLL/redux/app-reducer";
 
 export const Sidebar = React.memo(() => {
   const dispatch = AppDispatch();
-  console.log("side");
+
   const todoLists = useAppSelector<TodoEntityType[]>(
     (state) => state.todoListData
   );

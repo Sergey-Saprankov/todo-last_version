@@ -10,7 +10,6 @@ import { AddNewTodo } from "../components/AddNewBoard/AddNewTodo";
 function App() {
   const dispatch = AppDispatch();
   console.log("app");
-
   useEffect(() => {
     dispatch(getTodosTC());
   }, []);

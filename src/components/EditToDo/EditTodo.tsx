@@ -43,7 +43,7 @@ export const EditTodo: React.FC<AddNewBoardType> = React.memo(
       setNewTodoTitle(e.currentTarget.value);
     };
 
-    const addedNewToDoHandler = () => {
+    const updateToDoHandler = () => {
       if (newTodoTitle.trim()) {
         dispatch(updateTodoListTitle(todolistId, newTodoTitle));
         setError("");
@@ -111,7 +111,7 @@ export const EditTodo: React.FC<AddNewBoardType> = React.memo(
             </button>
             <button
               disabled={entityStatus === "loading"}
-              onClick={addedNewToDoHandler}
+              onClick={updateToDoHandler}
               className={s.btn}
             >
               Save Changes
