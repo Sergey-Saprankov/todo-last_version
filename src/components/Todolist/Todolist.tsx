@@ -3,7 +3,7 @@ import s from "./Todolist.module.css";
 import setting from "./img/setting.svg";
 import { AppDispatch, useAppSelector } from "../../BLL/redux/store";
 import { addTaskTC, getTasksTC } from "../../BLL/redux/task-reducer";
-import { useLocation, useParams } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 import { TodoEntityType } from "../../BLL/redux/redux-type/redux-type";
 import { setModalStatusAC, StatusType } from "../../BLL/redux/app-reducer";
 import { Tasks } from "../Task/Tasks";
@@ -13,6 +13,7 @@ import Loading from "../Loading/Loading";
 
 export const Todolist = React.memo(() => {
   const dispatch = AppDispatch();
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -42,7 +43,9 @@ export const Todolist = React.memo(() => {
   const openEditModalHandler = () => {
     dispatch(setModalStatusAC(true, "editTodoModal"));
   };
-
+  if (!isLoggedIn) {
+    return <Navigate to={"/login"} />;
+  }
   return (
     <div className={s.container}>
       <Message />

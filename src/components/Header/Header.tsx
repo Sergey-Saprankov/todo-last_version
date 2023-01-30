@@ -2,6 +2,7 @@ import React from "react";
 import s from "./Header.module.css";
 import logo1 from "../../img/logo1.png";
 import logo from "../../img/logo.svg";
+import { NavLink } from "react-router-dom";
 
 export const Header = React.memo(() => {
   console.log("header");
@@ -20,7 +21,9 @@ export const Header = React.memo(() => {
         <div>Task manager</div>
 
         <div>
-          <button className={s.btn}>Login</button>
+          <NavLink to={"/login"} className={s.btn}>
+            Login
+          </NavLink>
         </div>
       </div>
     </div>

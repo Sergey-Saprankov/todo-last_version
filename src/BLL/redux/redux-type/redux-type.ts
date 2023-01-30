@@ -22,6 +22,7 @@ import {
   TodoListDataType,
 } from "../../../api/api-types/api-types";
 import { setErrorAC, setModalStatusAC, setStatusAC } from "../app-reducer";
+import { setIsLoggedInAC } from "../auth-reducer";
 
 export type AddTaskACType = ReturnType<typeof addTaskAC>;
 export type ChangeTaskPriorityACType = ReturnType<typeof changeTaskPriorityAC>;
@@ -48,6 +49,8 @@ export type ChangeTodolistEntityStatusACType = ReturnType<
   typeof changeTodolistEntityStatusAC
 >;
 
+export type SetIsLoggedInACType = ReturnType<typeof setIsLoggedInAC>;
+
 export type ActionType =
   | AddTodoListACType
   | AddTaskACType
@@ -65,7 +68,8 @@ export type ActionType =
   | SetStatusACType
   | SetErrorACType
   | SetModalStatusACTypes
-  | ChangeTodolistEntityStatusACType;
+  | ChangeTodolistEntityStatusACType
+  | SetIsLoggedInACType;
 
 // export type TaskType = {
 //     taskId: string

@@ -6,11 +6,21 @@ import { Header } from "../components/Header/Header";
 import { Main } from "../components/Main/Main";
 import { Sidebar } from "../components/Sidebar/Sidebar";
 import { AddNewTodo } from "../components/AddNewBoard/AddNewTodo";
+import Login from "../components/Login/Login";
+import { meTC } from "../BLL/redux/auth-reducer";
+import { Navigate } from "react-router-dom";
 
 function App() {
   const dispatch = AppDispatch();
-  console.log("app");
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   useEffect(() => {
+    dispatch(meTC());
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      return;
+    }
     dispatch(getTodosTC());
   }, []);
 
@@ -18,7 +28,7 @@ function App() {
     <div className={"container"}>
       <Header />
       <Main />
-      <Sidebar />
+      {isLoggedIn && <Sidebar />}
       <AddNewTodo />
     </div>
   );
